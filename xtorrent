@@ -1,0 +1,42 @@
+#!/usr/bin/env lua
+package.path = package.path .. ";.xtorrent/?.lua"
+
+local util = require("util")
+
+local arg_count = #arg
+
+io.write([[
+
+###Torrent cli###
+
+]])
+
+if arg_count > 0 then
+	local prefix = arg[1]
+
+	if prefix == "-s" then
+		local query = arg[2]
+		local search = "?q=" .. query
+		local res = util.fetch(search)
+		util.torrentOptions(res)
+	end
+else
+	io.write([[
+Enter 1 for Movies
+Enter 2 for Music
+Enter 3 for E-books
+Enter 4 for Other
+]])
+
+	local reply = util.readInput()
+
+	if reply ~= nil then
+		local iReply = tonumber(reply)
+		local categories = { "201", "208", "601", "699" }
+
+		local categoryId = categories[iReply]
+		local url = "?q=category:" .. "" .. categoryId
+		local res = util.fetch(url)
+		util.torrentOptions(res)
+	end
+end
