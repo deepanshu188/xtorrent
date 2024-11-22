@@ -3,7 +3,17 @@
 PROJECT_DIR=$(pwd)
 LUAROCKS_DIR="$PROJECT_DIR/.modules"
 
-lua_version=$(ls .modules/share/lua)
+# Check if Lua is installed
+if ! command -v lua &>/dev/null; then
+  echo "Error: Lua is not installed. Please install Lua and try again."
+  exit 1
+fi
+
+# Check if LuaRocks is installed
+if ! command -v luarocks &>/dev/null; then
+  echo "Error: LuaRocks is not installed. Please install LuaRocks and try again."
+  exit 1
+fi
 
 mkdir -p "$LUAROCKS_DIR"
 
