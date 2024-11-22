@@ -111,7 +111,7 @@ function util.torrentOptions(res)
 				.. formatInfo(COLORS.green, "IMDB:", "https://www.imdb.com/title/" .. "" .. selectedTorrent["imdb"])
 		end
 
-		print(formatInfo(COLORS.red, "\n[[ Description ]]"))
+		print(formatInfo(COLORS.red, "\n[[ Info ]]"))
 		print(combined)
 
 		-- create magent link
