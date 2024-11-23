@@ -1,5 +1,8 @@
+-- external dependencies
 local http = require("socket.http")
 local JSON = require("JSON")
+
+-- internal dependencies
 local trackers = require("trackers")
 local config = require("config")
 
