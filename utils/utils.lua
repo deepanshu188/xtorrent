@@ -12,10 +12,20 @@ COLORS = {
 	red = "\27[31m",
 }
 
-local function copyToClipboard(text)
-	local command = string.format("echo -n %q | xclip -selection clipboard", text)
-	local success, error = os.execute(command)
+-- determine the linux session type
+local function getSessionType()
+	local sessionType = os.getenv("XDG_SESSION_TYPE")
+	if sessionType == "wayland" then
+		return "wayland"
+	elseif sessionType == "x11" then
+		return "x11"
+	else
+		return nil
+	end
+end
 
+local function executeCommand(command)
+	local success, error = os.execute(command)
 	if success then
 		print("copied to clipboard!")
 	elseif error then
@@ -23,6 +33,19 @@ local function copyToClipboard(text)
 	end
 end
 
+local function copyToClipboard(text)
+	local sessionType = getSessionType()
+	local command
+
+	if sessionType == "x11" then
+		command = string.format("echo -n %q | xclip -selection clipboard", text)
+	else
+		command = string.format("echo -n %q | wl-copy", text)
+	end
+	executeCommand(command)
+end
+
+-- convert size to human readable format
 local function convertSize(value)
 	local MiB = math.floor(value / 1000000)
 	if MiB > 1000 then
