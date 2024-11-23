@@ -1,8 +1,7 @@
 local http = require("socket.http")
 local JSON = require("JSON")
 local trackers = require("trackers")
-
-local baseUrl = "https://apibay.org/q.php"
+local config = require("config")
 
 local util = {}
 
@@ -38,9 +37,9 @@ local function copyToClipboard(text)
 	local command
 
 	if sessionType == "x11" then
-		command = string.format("echo -n %q | xclip -selection clipboard", text)
+		command = string.format(config.clipboard_command_x11, text)
 	else
-		command = string.format("echo -n %q | wl-copy", text)
+		command = string.format(config.clipboard_command_wayland, text)
 	end
 	executeCommand(command)
 end
@@ -78,7 +77,7 @@ end
 
 -- api call
 function util.fetch(url)
-	local requestUrl = baseUrl .. "" .. url
+	local requestUrl = config.baseUrl .. "" .. url
 	local response, status_code, _, _ = http.request(requestUrl)
 
 	if status_code == 200 then
