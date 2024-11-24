@@ -68,5 +68,4 @@ echo -e "\nUpdate the PATH variable in your shell configuration file..."
 echo -e "for example if you are using \e[1mbash\e[0m, run the following commands:\n"
 
 echo -e "\e[3mrun \e[0m\e[34mecho 'export PATH=\$HOME/.xtorrent:\$PATH' >> ~/.bashrc\e[0m"
-echo -e "\e[3mrun \e[0m\e[34msource ~/.bashrc\e[0m\n"
 echo -e "\e[3mrun \e[0m\e[34msource ~/.bashrc\e[0m"
