@@ -63,36 +63,39 @@ done
 echo "All packages installed successfully."
 
 # update the PATH variable in the user's shell configuration file
+
 # Prompt the user to select their shell
+echo "Which shell are you using?"
+echo "1) Bash"
+echo "2) Zsh"
+echo "3) Fish"
+echo "4) Other"
 
-PS3="Enter the number corresponding to your shell: "
-options=("Bash" "Zsh" "Fish" "Other")
+read -p "Enter the number corresponding to your shell: " shell_choice
 
-select opt in "${options[@]}"; do
-  case $opt in
-  "Bash")
-    SHELL_TYPE="bash"
-    SHELL_CONFIG_FILE="$HOME/.bashrc"
-    break
-    ;;
-  "Zsh")
-    SHELL_TYPE="zsh"
-    SHELL_CONFIG_FILE="$HOME/.zshrc"
-    break
-    ;;
-  "Fish")
-    SHELL_TYPE="fish"
-    SHELL_CONFIG_FILE="$HOME/.config/fish/config.fish"
-    break
-    ;;
-  "Other")
-    echo "Please manually add the following line to your shell configuration file:"
-    echo "export PATH=\"$PROJECT_DIR:\$PATH\""
-    exit 0
-    ;;
-  *) echo "Invalid option $REPLY" ;;
-  esac
-done
+case "$shell_choice" in
+1)
+  SHELL_TYPE="bash"
+  SHELL_CONFIG_FILE="$HOME/.bashrc"
+  ;;
+2)
+  SHELL_TYPE="zsh"
+  SHELL_CONFIG_FILE="$HOME/.zshrc"
+  ;;
+3)
+  SHELL_TYPE="fish"
+  SHELL_CONFIG_FILE="$HOME/.config/fish/config.fish"
+  ;;
+4)
+  echo "Please manually add the following line to your shell configuration file:"
+  echo "export PATH=\"$PROJECT_DIR:\$PATH\""
+  exit 0
+  ;;
+*)
+  echo "Invalid choice. Please enter a valid number."
+  exit 1
+  ;;
+esac
 
 # Add ~/.xtorrent to PATH if not already present
 if ! grep -q "export PATH=\"$PROJECT_DIR:\$PATH\"" "$SHELL_CONFIG_FILE"; then
