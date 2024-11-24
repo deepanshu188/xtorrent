@@ -64,59 +64,6 @@ echo "All packages installed successfully."
 
 # update the PATH variable in the user's shell configuration file
 
-# Prompt the user to select their shell
-echo "Which shell are you using?"
-echo "1) Bash"
-echo "2) Zsh"
-echo "3) Fish"
-echo "4) Other"
-
-read -p "Enter the number corresponding to your shell: " shell_choice
-
-case "$shell_choice" in
-1)
-  SHELL_TYPE="bash"
-  SHELL_CONFIG_FILE="$HOME/.bashrc"
-  ;;
-2)
-  SHELL_TYPE="zsh"
-  SHELL_CONFIG_FILE="$HOME/.zshrc"
-  ;;
-3)
-  SHELL_TYPE="fish"
-  SHELL_CONFIG_FILE="$HOME/.config/fish/config.fish"
-  ;;
-4)
-  echo "Please manually add the following line to your shell configuration file:"
-  echo "export PATH=\"$PROJECT_DIR:\$PATH\""
-  exit 0
-  ;;
-*)
-  echo "Invalid choice. Please enter a valid number."
-  exit 1
-  ;;
-esac
-
-# Add ~/.xtorrent to PATH if not already present
-if ! grep -q "export PATH=\"$PROJECT_DIR:\$PATH\"" "$SHELL_CONFIG_FILE"; then
-  echo "Adding ~/.xtorrent to PATH in $SHELL_CONFIG_FILE..."
-  echo "export PATH=\"$PROJECT_DIR:\$PATH\"" >>"$SHELL_CONFIG_FILE"
-  echo "Added ~/.xtorrent to PATH in $SHELL_CONFIG_FILE."
-else
-  echo "~/.xtorrent is already in PATH in $SHELL_CONFIG_FILE."
-fi
-
-# Source the updated shell configuration file
-case "$SHELL_TYPE" in
-bash)
-  source "$SHELL_CONFIG_FILE"
-  ;;
-zsh)
-  source "$SHELL_CONFIG_FILE"
-  ;;
-fish)
-  source "$SHELL_CONFIG_FILE"
-  ;;
-esac
-
-echo "Installation complete."
+echo "Updating PATH variable in your shell configuration file..."
+echo "export PATH=\"$PROJECT_DIR:\$PATH\"" >>"$SHELL_CONFIG_FILE"
+echo "source "$SHELL_CONFIG_FILE""
