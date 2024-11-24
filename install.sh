@@ -64,6 +64,6 @@ echo "All packages installed successfully."
 
 # update the PATH variable in the user's shell configuration file
 
-echo "Updating PATH variable in your shell configuration file..."
-echo "export PATH=\"$PROJECT_DIR:\$PATH\"" >>"$SHELL_CONFIG_FILE"
-echo "source "$SHELL_CONFIG_FILE""
+echo "\n Updating PATH variable in your shell configuration file...\n"
+echo "\e[3mrun \e[0m\e[34mexport PATH=\"$PROJECT_DIR:\$PATH\"" >>"~/.bashrc\e[0m"
+echo -e "\e[3mrun \e[0m\e[34msource ~/.bashrc\e[0m"
