@@ -1,6 +1,6 @@
 # Xtorrent
 
-xtorrent is a cli tool to make it easy to find the torrent files & download it without leaving the terminal.
+Xtorrent is torrent helper cli written in lua. It is helpful for searching torrents and downloading them without leaving the terminal.
 
 ## Installation
 
@@ -17,3 +17,14 @@ xtorrent is a cli tool to make it easy to find the torrent files & download it w
 curl -s https://raw.githubusercontent.com/deepanshu188/xtorrent/master/install.sh | bash
 ```
 
+## Usage
+
+### Search
+
+```bash
+xtorrent -q <query>
+```
+
+## Configuration
+
+You can configure xtorrent by editing the (config.lua)[https://github.com/deepanshu188/xtorrent/blob/master/config.lua]{:target="_blank"} file.
