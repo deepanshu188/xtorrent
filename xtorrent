@@ -1,7 +1,6 @@
 #!/usr/bin/env lua
 package.path = package.path .. ";./.modules/share/lua/5.4/?.lua;" .. "./.modules/share/lua/5.4/?/init.lua"
 package.cpath = package.cpath .. ";./.modules/lib/lua/5.4/?.so"
-package.path = package.path .. ";./utils/?.lua;"
 
 local utils = require("utils")
 
@@ -19,7 +18,7 @@ if arg_count > 0 then
 	if prefix == "-s" then
 		local query = arg[2]
 		local search = "?q=" .. query
-		local res = utils.fetch(search)
+		local res = utils.fetchTorrent(search)
 		utils.torrentOptions(res)
 	end
 else
@@ -38,7 +37,7 @@ Enter 4 for Other
 
 		local categoryId = categories[iReply]
 		local url = "?q=category:" .. "" .. categoryId
-		local res = utils.fetch(url)
+		local res = utils.fetchTorrent(url)
 		utils.torrentOptions(res)
 	end
 end

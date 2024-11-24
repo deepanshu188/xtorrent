@@ -3,10 +3,9 @@ local http = require("socket.http")
 local JSON = require("JSON")
 
 -- internal dependencies
-local trackers = require("trackers")
 local config = require("config")
 
-local util = {}
+local utils = {}
 
 COLORS = {
 	reset = "\27[0m",
@@ -58,7 +57,7 @@ local function convertSize(value)
 end
 
 -- read input using protected call
-function util.readInput()
+function utils.readInput()
 	local success, input = pcall(io.read)
 
 	if success then
@@ -79,10 +78,8 @@ local function formatInfo(color, label, value)
 end
 
 -- api call
-function util.fetch(url)
-	local requestUrl = config.baseUrl .. "" .. url
-	local response, status_code, _, _ = http.request(requestUrl)
-
+function utils.fetch(url)
+	local response, status_code, _, _ = http.request(url)
 	if status_code == 200 then
 		return response
 	else
@@ -90,7 +87,12 @@ function util.fetch(url)
 	end
 end
 
-function util.torrentOptions(res)
+function utils.fetchTorrent(url)
+	local requestUrl = config.baseUrl .. "" .. url
+	return utils.fetch(requestUrl)
+end
+
+function utils.torrentOptions(res)
 	if res == nil then
 		return
 	end
@@ -113,7 +115,7 @@ function util.torrentOptions(res)
 
 	io.write("\nEnter the number to see details\n")
 
-	local index = util.readInput()
+	local index = utils.readInput()
 
 	if index ~= nil then
 		local i = tonumber(index)
@@ -139,30 +141,39 @@ function util.torrentOptions(res)
 		print(formatInfo(COLORS.red, "\n[[ Info ]]"))
 		print(combined)
 
-		-- create magent link
-		local magent = "magnet:?xt=urn:btih:" .. selectedTorrent.info_hash .. "&dn=" .. selectedTorrent.info_hash
+		-- create magnet link
+		local magnet = "magnet:?xt=urn:btih:" .. selectedTorrent.info_hash .. "&dn=" .. selectedTorrent.info_hash
 
-		for _, tracker in ipairs(trackers) do
-			magent = magent .. "&tr=" .. tracker
+		-- fetch trackers from external url
+		local trackers = utils.fetch(config.trackers_url)
+		local tracker_list = {}
+
+		-- Split the response by lines and insert each line into the table
+		for line in trackers:gmatch("[^\r\n]+") do
+			table.insert(tracker_list, line)
+		end
+
+		for _, tracker in ipairs(tracker_list) do
+			magnet = magnet .. "&tr=" .. tracker
 		end
 
 		print(formatInfo(COLORS.red, "\n[[ Actions ]]\n"))
 		print("1. Download using Transmission Cli\t 2. Copy Magent Link\n")
 
-		local option = tonumber(util.readInput())
+		local option = tonumber(utils.readInput())
 		if option == 1 then
 			local client = "transmission-cli"
 			local isInstalled = string.format("which %s", client) ~= client .. " not found"
 
 			if isInstalled then
-				os.execute(client .. " " .. magent)
+				os.execute(client .. " " .. magnet)
 			else
 				print(client .. " is not installed")
 			end
 		elseif option == 2 then
-			copyToClipboard(magent)
+			copyToClipboard(magnet)
 		end
 	end
 end
 
-return util
+return utils
