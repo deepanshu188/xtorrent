@@ -27,4 +27,4 @@ xtorrent -q <query>
 
 ## Configuration
 
-You can configure xtorrent by editing the (config.lua)[https://github.com/deepanshu188/xtorrent/blob/master/config.lua]{:target="_blank"} file.
+You can configure xtorrent by editing the [config.lua](https://github.com/deepanshu188/xtorrent/blob/master/config.lua) file.
