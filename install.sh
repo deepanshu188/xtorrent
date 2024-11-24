@@ -3,71 +3,61 @@
 PROJECT_DIR=$(pwd)
 LUAROCKS_DIR="$PROJECT_DIR/.modules"
 
+# Function to check if a command is available
+check_command_exists() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "Error: $1 is not installed. Please install $1 and try again."
+    exit 1
+  fi
+}
+
+# Function to check if the last command was successful
+check_success() {
+  if [ $? -ne 0 ]; then
+    echo "$1"
+    exit 1
+  fi
+}
+
+# Function to perform a command with a success message and failure message
+perform_command() {
+  local command="$1"
+  local success_message="$2"
+  local failure_message="$3"
+
+  echo "$success_message..."
+  eval "$command"
+  check_success "$failure_message"
+
+  echo "$success_message."
+}
+
 # Check if Git is installed
-if ! command -v git &>/dev/null; then
-  echo "Error: Git is not installed. Please install Git and try again."
-  exit 1
-fi
+check_command_exists "git"
 
 # Clone the xtorrent repository
-echo "Cloning xtorrent repository..."
-git clone https://github.com/deepanshu188/xtorrent.git
+perform_command "git clone https://github.com/deepanshu188/xtorrent.git" "Cloning xtorrent repository" "Failed to clone xtorrent repository"
 
-# Check if the clone was successful
-if [ $? -ne 0 ]; then
-  echo "Failed to clone xtorrent repository."
-  exit 1
-fi
+# Rename the xtorrent directory to .xtorrent
+perform_command "mv xtorrent .xtorrent" "Renaming xtorrent directory to .xtorrent" "Failed to rename directory to .xtorrent"
 
-echo "Successfully cloned xtorrent repository."
-
-# Change directory into xtorrent
-cd xtorrent
-
-# Check if the directory change was successful
-if [ $? -ne 0 ]; then
-  echo "Failed to change directory into xtorrent."
-  exit 1
-fi
-
-echo "Successfully changed directory into xtorrent."
+# Change directory into .xtorrent
+perform_command "cd .xtorrent" "Changing directory into .xtorrent" "Failed to change directory into .xtorrent"
 
 # Check if Lua is installed
-if ! command -v lua &>/dev/null; then
-  echo "Error: Lua is not installed. Please install Lua and try again."
-  exit 1
-fi
+check_command_exists "lua"
 
 # Check if LuaRocks is installed
-if ! command -v luarocks &>/dev/null; then
-  echo "Error: LuaRocks is not installed. Please install LuaRocks and try again."
-  exit 1
-fi
+check_command_exists "luarocks"
 
-mkdir -p "$LUAROCKS_DIR"
-
-# Check if the directory was created successfully
-if [ $? -ne 0 ]; then
-  echo "Failed to create .modules directory."
-  exit 1
-fi
-
-echo "Successfully created .modules directory."
+# Create the .modules directory
+perform_command "mkdir -p \"$LUAROCKS_DIR\"" "Creating .modules directory" "Failed to create .modules directory"
 
 # Install lua-json, luasec, and luasocket using LuaRocks
 PACKAGES=("json-lua" "luasec" "luasocket")
 
 for package in "${PACKAGES[@]}"; do
-  echo "Installing $package..."
-  luarocks install "$package" --tree="$LUAROCKS_DIR"
-
-  # Check if the installation was successful
-  if [ $? -ne 0 ]; then
-    echo "Failed to install $package."
-    exit 1
-  fi
-
-  echo "Successfully installed $package."
+  perform_command "luarocks install \"$package\" --tree=\"$LUAROCKS_DIR\"" "Installing $package" "Failed to install $package"
 done
 
 echo "All packages installed successfully."
