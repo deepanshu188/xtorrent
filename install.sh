@@ -61,3 +61,59 @@ for package in "${PACKAGES[@]}"; do
 done
 
 echo "All packages installed successfully."
+
+# update the PATH variable in the user's shell configuration file
+# Prompt the user to select their shell
+
+PS3="Enter the number corresponding to your shell: "
+options=("Bash" "Zsh" "Fish" "Other")
+
+select opt in "${options[@]}"; do
+  case $opt in
+  "Bash")
+    SHELL_TYPE="bash"
+    SHELL_CONFIG_FILE="$HOME/.bashrc"
+    break
+    ;;
+  "Zsh")
+    SHELL_TYPE="zsh"
+    SHELL_CONFIG_FILE="$HOME/.zshrc"
+    break
+    ;;
+  "Fish")
+    SHELL_TYPE="fish"
+    SHELL_CONFIG_FILE="$HOME/.config/fish/config.fish"
+    break
+    ;;
+  "Other")
+    echo "Please manually add the following line to your shell configuration file:"
+    echo "export PATH=\"$PROJECT_DIR:\$PATH\""
+    exit 0
+    ;;
+  *) echo "Invalid option $REPLY" ;;
+  esac
+done
+
+# Add ~/.xtorrent to PATH if not already present
+if ! grep -q "export PATH=\"$PROJECT_DIR:\$PATH\"" "$SHELL_CONFIG_FILE"; then
+  echo "Adding ~/.xtorrent to PATH in $SHELL_CONFIG_FILE..."
+  echo "export PATH=\"$PROJECT_DIR:\$PATH\"" >>"$SHELL_CONFIG_FILE"
+  echo "Added ~/.xtorrent to PATH in $SHELL_CONFIG_FILE."
+else
+  echo "~/.xtorrent is already in PATH in $SHELL_CONFIG_FILE."
+fi
+
+# Source the updated shell configuration file
+case "$SHELL_TYPE" in
+bash)
+  source "$SHELL_CONFIG_FILE"
+  ;;
+zsh)
+  source "$SHELL_CONFIG_FILE"
+  ;;
+fish)
+  source "$SHELL_CONFIG_FILE"
+  ;;
+esac
+
+echo "Installation complete."

@@ -1,6 +1,9 @@
 #!/usr/bin/env lua
-package.path = package.path .. ";./.modules/share/lua/5.4/?.lua;" .. "./.modules/share/lua/5.4/?/init.lua"
-package.cpath = package.cpath .. ";./.modules/lib/lua/5.4/?.so"
+
+local base_dir = os.getenv("HOME") .. "/.xtorrent"
+
+package.path = package.path .. ";" .. base_dir .. "/?.lua;" .. base_dir .. "/.modules/share/lua/5.4/?.lua;"
+package.cpath = package.cpath .. ";" .. base_dir .. "/.modules/lib/lua/5.4/?.so"
 
 local utils = require("utils")
 
