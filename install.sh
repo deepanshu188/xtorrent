@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_DIR=$(pwd)
+PROJECT_DIR="$HOME/.torrent"
 LUAROCKS_DIR="$PROJECT_DIR/.modules"
 
 # Function to check if a command is available
