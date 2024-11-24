@@ -101,7 +101,7 @@ function utils.torrentOptions(res)
 
 	print("\nS No.", "\tSE", "\tLE", "\tDate", "\t\tSize", "\t\tName\n")
 
-	for index, value in ipairs(r) do
+	local function printTorrentTable(index, value)
 		print(string.rep("-", 150))
 		print(
 			index,
@@ -111,6 +111,17 @@ function utils.torrentOptions(res)
 			"\t" .. "" .. convertSize(value.size),
 			"\t" .. "" .. value.name
 		)
+	end
+
+	if config.torrent_list.reverse then
+		for i = #r, 1, -1 do
+			local value = r[i]
+			printTorrentTable(i, value)
+		end
+	else
+		for i, value in ipairs(r) do
+			printTorrentTable(i, value)
+		end
 	end
 
 	io.write("\nEnter the number to see details\n")
