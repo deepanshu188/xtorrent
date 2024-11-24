@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_DIR="$HOME/.torrent"
+PROJECT_DIR="$HOME/.xtorrent"
 LUAROCKS_DIR="$PROJECT_DIR/.modules"
 
 # Function to check if a command is available
